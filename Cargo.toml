@@ -1,0 +1,16 @@
+[package]
+name = "spellbound"
+version = "0.1.0"
+authors = ["Andy Russell <arussell123@gmail.com>"]
+edition = "2018"
+
+[target.'cfg(target_os="macos")'.dependencies.cocoa]
+git = "https://github.com/servo/core-foundation-rs"
+
+[target.'cfg(windows)'.dependencies.winapi]
+version = "0.3"
+features = ["combaseapi", "objbase", "spellcheck"]
+
+[dependencies]
+cfg-if = "0.1.6"
+lazy_static = "1.3.0"
