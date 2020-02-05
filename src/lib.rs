@@ -1,11 +1,25 @@
 //! `spellbound` is a small crate that binds to the native platform's spell checking APIs and
 //! provides a friendlier API.
 //!
-//! This corresponds to [`ISpellChecker`] on Windows and [`NSSpellChecker`] on MacOS. Linux is not
-//! currently supported.
+//! This corresponds to [`ISpellChecker`] on Windows, [`NSSpellChecker`] on MacOS, and [`hunspell`]
+//! on other *nix platforms.
+//!
+//! # Example
+//!
+//! ```
+//! use spellbound::Checker;
+//!
+//! let mut checker = Checker::new();
+//!
+//! let errors: Vec<_> = checker.check("I beleeve I can fly").collect();
+//!
+//! assert_eq!(errors.len(), 1);
+//! assert_eq!(errors[0].text(), "beleeve");
+//! ```
 //!
 //! [`ISpellChecker`]: https://docs.microsoft.com/en-us/windows/desktop/api/spellcheck/nn-spellcheck-ispellchecker
 //! [`NSSpellChecker`]: https://developer.apple.com/documentation/appkit/nsspellchecker
+//! [`hunspell`]: https://hunspell.github.io/
 
 extern crate cfg_if;
 
@@ -26,12 +40,12 @@ cfg_if! {
     }
 }
 
-/// An interface into the system spell checker.
+/// Instance of the system spell checker.
 #[derive(Debug)]
 pub struct Checker(imp::Checker);
 
 impl Checker {
-    /// Get an instance of the system spell checker.
+    /// Create an instance of the system spell checker.
     pub fn new() -> Self {
         Checker(imp::Checker::new())
     }
