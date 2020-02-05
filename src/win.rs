@@ -1,7 +1,6 @@
 use std::ffi::OsStr;
 use std::fmt::{self, Debug};
 use std::iter;
-use std::mem;
 use std::ops::Deref;
 use std::os::windows::ffi::OsStrExt;
 use std::ptr::{self, NonNull};
@@ -10,7 +9,7 @@ use winapi::{
     Class,
     Interface,
     shared::{
-        winerror::{FAILED, SUCCEEDED, S_FALSE},
+        winerror::{SUCCEEDED, S_FALSE},
         wtypesbase::CLSCTX_INPROC_SERVER,
     },
     um::{
@@ -137,7 +136,7 @@ impl Iterator for ErrorIter {
     fn next(&mut self) -> Option<SpellingError> {
         let iter = self.iter.as_ref()?;
 
-        let mut err = unsafe { mem::uninitialized() };
+        let mut err = ptr::null_mut();
         if unsafe { (*iter).Next(&mut err) } != S_FALSE {
             let err = ComPtr::new(err);
 
