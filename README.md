@@ -11,9 +11,8 @@ Supported platforms and corresponding APIs:
 | -------- | ------------------ |
 | MacOS    | [`NSSpellChecker`] |
 | Windows  | [`ISpellChecker`]  |
-
-Linux is not currently supported, since it does not have a native spell checking
-API.
+| *nix     | [`hunspell`]
 
 [`ISpellChecker`]: https://docs.microsoft.com/en-us/windows/desktop/api/spellcheck/nn-spellcheck-ispellchecker
 [`NSSpellChecker`]: https://developer.apple.com/documentation/appkit/nsspellchecker
+[`hunspell`]: https://hunspell.github.io/

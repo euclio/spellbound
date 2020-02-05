@@ -18,6 +18,9 @@ cfg_if! {
     } else if #[cfg(windows)] {
         mod win;
         use crate::win as imp;
+    } else if #[cfg(unix)] {
+        mod unix;
+        use crate::unix as imp;
     } else {
         compile_error!("target platform is not supported");
     }
@@ -34,7 +37,10 @@ impl Checker {
     }
 
     /// Check a text for spelling errors. Returns an iterator over the errors present in the text.
-    pub fn check(&mut self, text: &str) -> impl Iterator<Item = SpellingError> {
+    pub fn check<'a, 'b: 'a>(
+        &'b mut self,
+        text: &'a str,
+    ) -> impl Iterator<Item = SpellingError> + 'a {
         self.0.check(text).map(SpellingError)
     }
 
@@ -92,5 +98,29 @@ mod tests {
     fn empty() {
         let mut checker = Checker::new();
         assert_eq!(checker.check("").count(), 0);
+    }
+
+    #[test]
+    fn ignore() {
+        let mut checker = Checker::new();
+
+        assert_eq!(checker.check("foobarbaz").count(), 1);
+
+        checker.ignore("foobarbaz");
+
+        assert_eq!(checker.check("foobarbaz").count(), 0);
+    }
+
+    #[test]
+    fn ignore_not_permanent() {
+        let mut checker = Checker::new();
+
+        checker.ignore("foobarbaz");
+
+        drop(checker);
+
+        let mut checker = Checker::new();
+
+        assert_eq!(checker.check("foobarbaz").count(), 1);
     }
 }
