@@ -121,7 +121,7 @@ impl Checker {
         }
 
         let word = wide_string(word);
-        let hr = unsafe { (*self.checker).Add(word.as_ptr()) };
+        let hr = unsafe { (*self.checker).Ignore(word.as_ptr()) };
         assert!(SUCCEEDED(hr));
     }
 }
