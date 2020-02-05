@@ -1,8 +1,12 @@
 [package]
 name = "spellbound"
+description = "Bindings to your friendly neighborhood spellchecker"
+documentation = "https://docs.rs/spellbound"
+repository = "https://github.com/euclio/spellbound"
 version = "0.1.0"
 authors = ["Andy Russell <arussell123@gmail.com>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
 
 [target.'cfg(target_os="macos")'.dependencies]
 cocoa = "0.20.0"
